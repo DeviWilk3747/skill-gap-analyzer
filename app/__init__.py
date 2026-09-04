@@ -26,8 +26,8 @@ def create_app(config_class=Config):
 
     # Imported here rather than at the top because each routes module imports
     # db from this file, which would be a circular import
-    #from app.routes.auth import auth_bp
-    #app.register_blueprint(auth_bp)
+    from app.routes.auth import auth_bp
+    app.register_blueprint(auth_bp)
 
     #from app.routes.skills import skills_bp
     #app.register_blueprint(skills_bp)
