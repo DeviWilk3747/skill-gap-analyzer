@@ -2,7 +2,7 @@ import re
 from skills_data import SKILLS
 
 def build_lookup(skills):
-    """Invert the SKILLS dictionart so every alias maps to its canonical name.
+    """Invert the SKILLS dictionary so every alias maps to its canonical name.
     
     SKILLS is written canonical-first because that is easier to amintain, but
     extraction needs to go the other way: given an alias found in text, which

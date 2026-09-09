@@ -29,8 +29,8 @@ def create_app(config_class=Config):
     from app.routes.auth import auth_bp
     app.register_blueprint(auth_bp)
 
-    #from app.routes.skills import skills_bp
-    #app.register_blueprint(skills_bp)
+    from app.routes.skills import skills_bp
+    app.register_blueprint(skills_bp)
 
     #from app.routes.postings import postings_bp
     #app.register_blueprint(postings_bp)
