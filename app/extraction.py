@@ -1,5 +1,5 @@
 import re
-from skills_data import SKILLS
+from app.skills_data import SKILLS
 
 def build_lookup(skills):
     """Invert the SKILLS dictionary so every alias maps to its canonical name.

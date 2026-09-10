@@ -32,7 +32,7 @@ def create_app(config_class=Config):
     from app.routes.skills import skills_bp
     app.register_blueprint(skills_bp)
 
-    #from app.routes.postings import postings_bp
-    #app.register_blueprint(postings_bp)
+    from app.routes.postings import postings_bp
+    app.register_blueprint(postings_bp)
 
     return app
