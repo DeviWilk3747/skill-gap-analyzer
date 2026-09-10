@@ -7,6 +7,22 @@ from app.extraction import extract_skills
 
 postings_bp = Blueprint("postings", __name__)
 
+def posting_to_dict(posting):
+    return{
+        "id": posting.id,
+        "title": posting.title,
+        "company": posting.company,
+        "raw_text": posting.raw_text,
+        "created_at": posting.created_at.isoformat()
+    }
+
+def posting_skill_to_dict(posting_skill):
+    return{
+        "id": posting_skill.id,
+        "skill_name": posting_skill.skill_name,
+        "is_required": posting_skill.is_required
+    }
+
 @postings_bp.route("/api/postings", methods=["POST"])
 @api_login_required
 def create_posting():
@@ -50,3 +66,27 @@ def create_posting():
         "company": posting.company,
         "skills": skill_names
     }), 201
+
+@postings_bp.route("/api/postings", methods=["GET"])
+@api_login_required
+def list_postings():
+    postings = Posting.query.filter_by(user_id=session["user_id"]).all()
+    return jsonify([posting_to_dict(a) for a in postings])
+
+@postings_bp.route("/api/postings/<int:posting_id>", methods=["GET"])
+@api_login_required
+def single_posting(posting_id):
+    posting = Posting.query.filter_by(
+        id=posting_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if posting is None:
+            return jsonify({"error": "Posting not found"}), 404
+
+    skills = PostingSkill.query.filter_by(posting_id=posting.id).all()
+
+
+    result = posting_to_dict(posting)
+    result["skills"] = [posting_skill_to_dict(s) for s in skills]
+    return jsonify(result)
