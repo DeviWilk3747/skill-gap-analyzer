@@ -22,10 +22,6 @@ def build_pattern(alias):
     prefix = r"\b" if alias[0].isalnum() else ""
     suffix = r"\b" if alias[-1].isalnum() else ""
     return rf"{prefix}{re.escape(alias)}{suffix}"
-
-def find_skill(text):
-    r"""Return True if alias appears in text as a whole word."""
-    return re.search(build_pattern, text) is not None
     
 def extract_skills(text):
     """Return the canonical names of every skill mentioned in text."""
