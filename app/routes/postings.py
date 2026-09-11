@@ -1,9 +1,10 @@
 from flask import Blueprint, jsonify, request, session
 
 from app import db
-from app.models import Posting, PostingSkill
+from app.models import Posting, PostingSkill, UserSkill
 from app.auth_helpers import api_login_required
 from app.extraction import extract_skills
+from app.scoring import score_posting
 
 postings_bp = Blueprint("postings", __name__)
 
@@ -85,8 +86,12 @@ def single_posting(posting_id):
             return jsonify({"error": "Posting not found"}), 404
 
     skills = PostingSkill.query.filter_by(posting_id=posting.id).all()
-
+    user_skills = UserSkill.query.filter_by(user_id=session["user_id"]).all()
+    
+    posting_skill_names = [s.skill_name for s in skills]
+    user_skill_names = [s.skill_name for s in user_skills]
 
     result = posting_to_dict(posting)
     result["skills"] = [posting_skill_to_dict(s) for s in skills]
+    result["score"] = score_posting(posting_skill_names, user_skill_names)
     return jsonify(result)
