@@ -5,6 +5,7 @@ from app.models import Posting, PostingSkill, UserSkill
 from app.auth_helpers import api_login_required
 from app.extraction import extract_skills
 from app.scoring import score_posting
+from collections import Counter
 
 postings_bp = Blueprint("postings", __name__)
 
@@ -87,11 +88,39 @@ def single_posting(posting_id):
 
     skills = PostingSkill.query.filter_by(posting_id=posting.id).all()
     user_skills = UserSkill.query.filter_by(user_id=session["user_id"]).all()
-    
+
     posting_skill_names = [s.skill_name for s in skills]
     user_skill_names = [s.skill_name for s in user_skills]
 
     result = posting_to_dict(posting)
     result["skills"] = [posting_skill_to_dict(s) for s in skills]
     result["score"] = score_posting(posting_skill_names, user_skill_names)
+    return jsonify(result)
+
+@postings_bp.route("/api/gaps", methods=["GET"])
+@api_login_required
+def get_gaps():
+    postings = Posting.query.filter_by(user_id=session["user_id"]).all()
+    posting_ids = [p.id for p in postings]
+
+    posting_skills = PostingSkill.query.filter(
+        PostingSkill.posting_id.in_(posting_ids)
+    ).all()
+
+    user_skills = UserSkill.query.filter_by(user_id=session["user_id"]).all()
+    user_skill_set = {s.skill_name for s in user_skills}
+
+    missing = []
+
+    for ps in posting_skills:
+        if ps.skill_name not in user_skill_set:
+            missing.append(ps.skill_name)
+
+    counts = Counter(missing)
+
+    result = [
+        {"skill": name, "count": count}
+        for name, count in counts.most_common()
+    ]
+
     return jsonify(result)
