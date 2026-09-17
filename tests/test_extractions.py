@@ -1,4 +1,4 @@
-from extraction import extract_skills
+from app.extraction import extract_skills
 
 def test_finds_basic_skills():
     """A simple posting returns the skills it mentions."""

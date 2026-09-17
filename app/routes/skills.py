@@ -55,6 +55,21 @@ def add_skill():
 
     return jsonify(skill_to_dict(skill)), 201
 
+@skills_bp.route("/api/skills/<int:skill_id>", methods=["GET"])
+@api_login_required
+def get_skill(skill_id):
+    """Fetch a single skill by id, ensuring it belongs to the logged-in user."""
+    skill = UserSkill.query.filter_by(
+        id=skill_id,
+        user_id=session["user_id"]
+    ).first()
+
+    if skill is None:
+        return jsonify({"error": "Skill not found"}), 404
+
+    return jsonify(skill_to_dict(skill)), 200
+
+
 @skills_bp.route("/api/skills/<int:skill_id>", methods=["DELETE"])
 @api_login_required
 def delete_skill(skill_id):
