@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_cors import CORS
 
 from config import Config
 
@@ -15,6 +16,7 @@ def create_app(config_class=Config):
     a throwaway database without changing any application code.
     """
     app = Flask(__name__)
+    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
     # from_object copies every uppercase attribute off the class into app.config
     app.config.from_object(config_class)
