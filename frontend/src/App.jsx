@@ -1,4 +1,8 @@
 import { useState, useEffect } from "react";
+import Login from "./Login";
+import Skills from "./Skills";
+import Postings from "./Postings";
+import Gaps from "./Gaps"
 
 function App() {
   const [email, setEmail] = useState("");
@@ -125,99 +129,41 @@ function App() {
   if (loggedIn) {
     return (
       <div>
-        <h1>Skill Gap Analyzer</h1>
-        <h2>My Skills</h2>
-        <div>
-          <input
-            type="text"
-            placeholder="Skill name"
-            value={newSkillName}
-            onChange={(e) => setNewSkillName(e.target.value)}
-          />
-          <select
-            value={newProficiency}
-            onChange={(e) => setNewProficiency(e.target.value)}
-          >
-            <option value="Beginner">Beginner</option>
-            <option value="Intermediate">Intermediate</option>
-            <option value="Advanced">Advanced</option>
-          </select>
-          <button onClick={handleAddSkill}>Add Skill</button>
-        </div>
-        <ul>
-          {skills.map((skill) => (
-            <li key={skill.id}>
-              {skill.skill_name} - {skill.proficiency}
-              <button onClick={() => handleDeleteSkill(skill.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-
-        <h2>Add a Posting</h2>
-        <input
-          type="text"
-          placeholder="Job title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input 
-          type="text"
-          placeholder="Company"
-          value={company}
-          onChange={(e) => setCompany(e.target.value)}
-        />
-        <textarea
-          placeholder="Paste the job description"
-          value={rawText}
-          onChange={(e) => setRawText(e.target.value)}
-        />
-        <button onClick={handleAddPosting}>Analyze Posting</button>
-        <h2>My Postings</h2>
-        <ul>
-          {postings.map((posting) => (
-            <li key={posting.id}>
-              <strong>{posting.title}</strong> - {posting.company}
-              <div>Skills found: {posting.skills.join(", ")}</div>
-              <button onClick={() => handleDeletePosting(posting.id)}>Delete</button>
-            </li>
-          ))}
-        </ul>
-
-        <h2>Skill Gaps</h2>
-        <ul>
-          {gaps.map((gap) => (
-            <li key={gap.skill}>
-              {gap.skill} appears in {gap.count} postings
-            </li>
-          ))}
-        </ul>
-      </div>
+      <h1>Skill Gap Analyzer</h1>
+      <Skills
+        skills={skills}
+        newSkillName={newSkillName}
+        setNewSkillName={setNewSkillName}
+        newProficiency={newProficiency}
+        setNewProficiency={setNewProficiency}
+        handleAddSkill={handleAddSkill}
+        handleDeleteSkill={handleDeleteSkill}
+      />
+      <Postings
+        postings={postings}
+        title={title}
+        setTitle={setTitle}
+        company={company}
+        setCompany={setCompany}
+        rawText={rawText}
+        setRawText={setRawText}
+        handleAddPosting={handleAddPosting}
+        handleDeletePosting={handleDeletePosting}
+      />
+      <Gaps gaps={gaps} />
+    </div>
     );
   }
 
   return (
-    <div>
-      <h1>Skill Gap Analyzer</h1>
-      <h2>Log In</h2>
-
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-
-      <button onClick={handleLogin}>Log In</button>
-
-      {message && <p>{message}</p>}
-    </div>
+    <Login  
+      email={email}
+      setEmail={setEmail}
+      password={password}
+      setPassword={setPassword}
+      handleLogin={handleLogin}
+      message={message}
+    />
   );
 }
 
