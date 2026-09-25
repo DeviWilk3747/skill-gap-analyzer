@@ -36,6 +36,19 @@ function App() {
       });
   };
 
+  const handleLogout = () => {
+    fetch("http://localhost:5000/logout", {
+      method: "POST",
+      credentials: "include"
+    })
+    .then(() => {
+      setLoggedIn(false);
+      setSkills([]);
+      setPostings([]);
+      setGaps([]);
+    });
+  };
+
   const handleAddSkill = () => {
     fetch("http://localhost:5000/api/skills", {
       method: "POST",
@@ -80,6 +93,11 @@ function App() {
       setTitle("");
       setCompany("");
       setRawText("");
+      fetch("http://localhost:5000/api/gaps", {
+        credentials:"include"
+      })
+      .then((response) => response.json())
+      .then ((data) => setGaps(data));
     });
   };
 
@@ -90,6 +108,11 @@ function App() {
     })
     .then(() => {
       setPostings(postings.filter((posting) => posting.id !== postingId));
+      fetch("http://localhost:5000/api/gaps", {
+        credentials:"include"
+      })
+      .then((response) => response.json())
+      .then ((data) => setGaps(data));
     });
   };
 
@@ -129,8 +152,16 @@ function App() {
   if (loggedIn) {
     return (
       <div className="min-h-screen bg-gray-100 py-8">
-        <div className="max-w-2x1 mx-auto px-4">
-          <h1 className="text-3x1 font-bold text-center mb-6">Skill Gap Analyzer</h1>
+        <div className="max-w-2xl mx-auto px-4">
+          <h1 className="text-3xl font-bold text-center mb-6">Skill Gap Analyzer</h1>
+          <div className="flex justify-end mb-4">
+            <button 
+              onClick={handleLogout}
+              className="text-md font-small text-gray-700 hover:underline"
+              >
+                Logout
+            </button>
+          </div>
           <Skills
             skills={skills}
             newSkillName={newSkillName}
