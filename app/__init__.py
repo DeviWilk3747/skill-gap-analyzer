@@ -5,6 +5,7 @@ from flask_cors import CORS
 
 from config import Config
 
+import os
 # Created without an app sp that models and routes can import them at module
 # level. They get bound to a specific app inside create_app().
 db = SQLAlchemy()
@@ -16,7 +17,8 @@ def create_app(config_class=Config):
     a throwaway database without changing any application code.
     """
     app = Flask(__name__)
-    CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
+    CORS(app, supports_credentials=True,
+        origins=os.environ.get("FRONTEND_URL", "http://localhost:5173").split(","))
 
     # from_object copies every uppercase attribute off the class into app.config
     app.config.from_object(config_class)
