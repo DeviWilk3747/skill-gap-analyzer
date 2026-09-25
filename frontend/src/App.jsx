@@ -128,29 +128,31 @@ function App() {
 
   if (loggedIn) {
     return (
-      <div>
-      <h1>Skill Gap Analyzer</h1>
-      <Skills
-        skills={skills}
-        newSkillName={newSkillName}
-        setNewSkillName={setNewSkillName}
-        newProficiency={newProficiency}
-        setNewProficiency={setNewProficiency}
-        handleAddSkill={handleAddSkill}
-        handleDeleteSkill={handleDeleteSkill}
-      />
-      <Postings
-        postings={postings}
-        title={title}
-        setTitle={setTitle}
-        company={company}
-        setCompany={setCompany}
-        rawText={rawText}
-        setRawText={setRawText}
-        handleAddPosting={handleAddPosting}
-        handleDeletePosting={handleDeletePosting}
-      />
-      <Gaps gaps={gaps} />
+      <div className="min-h-screen bg-gray-100 py-8">
+        <div className="max-w-2x1 mx-auto px-4">
+          <h1 className="text-3x1 font-bold text-center mb-6">Skill Gap Analyzer</h1>
+          <Skills
+            skills={skills}
+            newSkillName={newSkillName}
+            setNewSkillName={setNewSkillName}
+            newProficiency={newProficiency}
+            setNewProficiency={setNewProficiency}
+            handleAddSkill={handleAddSkill}
+            handleDeleteSkill={handleDeleteSkill}
+          />
+          <Postings
+            postings={postings}
+            title={title}
+            setTitle={setTitle}
+            company={company}
+            setCompany={setCompany}
+            rawText={rawText}
+            setRawText={setRawText}
+            handleAddPosting={handleAddPosting}
+            handleDeletePosting={handleDeletePosting}
+          />
+          <Gaps gaps={gaps} />
+        </div>
     </div>
     );
   }
