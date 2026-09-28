@@ -1,4 +1,4 @@
-function Login({ email, setEmail, password, setPassword, handleLogin, message}){
+function Login({ email, setEmail, password, setPassword, handleLogin, message, setShowRegister}){
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
@@ -28,6 +28,16 @@ function Login({ email, setEmail, password, setPassword, handleLogin, message}){
                 </button>
 
                 {message && <p className="text-red-600 text-sm mt-3">{message}</p>}
+
+                <p className="text-sm text-center mt-4">
+                    Need an acount?{" "}
+                    <button
+                        onClick={() => setShowRegister(true)}
+                        className="text-blue-600 hover:underline"
+                    >
+                        Register
+                    </button>
+                </p>
             </div>
         </div>
     );

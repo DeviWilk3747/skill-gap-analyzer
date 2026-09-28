@@ -2,13 +2,16 @@ import { useState, useEffect } from "react";
 import Login from "./Login";
 import Skills from "./Skills";
 import Postings from "./Postings";
-import Gaps from "./Gaps"
+import Gaps from "./Gaps";
+import Register from "./Register";
+const API = import.meta.env.VITE_API_URL;
 
 function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [loggedIn, setLoggedIn] = useState(false);
+  const [showRegister, setShowRegister] = useState(false)
   const [skills, setSkills] = useState([]);
   const [newSkillName, setNewSkillName] = useState("");
   const [newProficiency, setNewProficiency] = useState("Beginner")
@@ -20,7 +23,7 @@ function App() {
   const [rawText, setRawText] = useState("");
 
   const handleLogin = () => {
-    fetch("http://localhost:5000/login", {
+    fetch(`${API}/login`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -36,8 +39,25 @@ function App() {
       });
   };
 
+  const handleRegister = () => {
+    fetch(`${API}/register`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({email, password}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+          setLoggedIn(true);
+      } else {
+        setMessage(data.error);
+      }
+    });
+  };
+
   const handleLogout = () => {
-    fetch("http://localhost:5000/logout", {
+    fetch(`${API}/logout`, {
       method: "POST",
       credentials: "include"
     })
@@ -50,7 +70,7 @@ function App() {
   };
 
   const handleAddSkill = () => {
-    fetch("http://localhost:5000/api/skills", {
+    fetch(`${API}/api/skills`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -66,7 +86,7 @@ function App() {
   };
   
   const handleDeleteSkill = (skillId) => {
-    fetch(`http://localhost:5000/api/skills/${skillId}`, {
+    fetch(`${API}/api/skills/${skillId}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -76,7 +96,7 @@ function App() {
   };
 
   const handleAddPosting = () => {
-    fetch("http://localhost:5000/api/postings", {
+    fetch(`${API}/api/postings`, {
       method: "POST",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
@@ -93,7 +113,7 @@ function App() {
       setTitle("");
       setCompany("");
       setRawText("");
-      fetch("http://localhost:5000/api/gaps", {
+      fetch(`${API}/api/gaps`, {
         credentials:"include"
       })
       .then((response) => response.json())
@@ -102,13 +122,13 @@ function App() {
   };
 
   const handleDeletePosting = (postingId) => {
-    fetch(`http://localhost:5000/api/postings/${postingId}`, {
+    fetch(`${API}/api/postings/${postingId}`, {
       method: "DELETE",
       credentials: "include",
     })
     .then(() => {
       setPostings(postings.filter((posting) => posting.id !== postingId));
-      fetch("http://localhost:5000/api/gaps", {
+      fetch(`${API}/api/gaps`, {
         credentials:"include"
       })
       .then((response) => response.json())
@@ -118,19 +138,19 @@ function App() {
 
     useEffect(() => {
       if (loggedIn) {
-        fetch("http://localhost:5000/api/skills", {
+        fetch(`${API}/api/skills`, {
           credentials: "include",
         })
         .then((response) => response.json())
         .then((data) => setSkills(data));
 
-        fetch("http://localhost:5000/api/postings", {
+        fetch(`${API}/api/postings`, {
            credentials: "include"
         })
         .then((response) => response.json())
         .then((data) => setPostings(data));
 
-        fetch("http://localhost:5000/api/gaps",{
+        fetch(`${API}/api/gaps`,{
           credentials: "include"
         })
         .then((response) => response.json())
@@ -139,7 +159,7 @@ function App() {
     }, [loggedIn]);
 
     useEffect(() => {
-      fetch ("http://localhost:5000/api/me", {
+      fetch (`${API}/api/me`, {
         credentials: "include",
       })
       .then((response) => {
@@ -187,15 +207,29 @@ function App() {
     </div>
     );
   }
+  if (showRegister) {
+    return (
+      <Register
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        handleRegister={handleRegister}
+        message={message}
+        setShowRegister={setShowRegister}
+      />
+    );
+  }
 
   return (
-    <Login  
+    <Login
       email={email}
       setEmail={setEmail}
       password={password}
       setPassword={setPassword}
       handleLogin={handleLogin}
       message={message}
+      setShowRegister={setShowRegister}
     />
   );
 }

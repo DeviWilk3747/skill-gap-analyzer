@@ -25,7 +25,7 @@ function Postings({ postings, title, setTitle, company, setCompany, rawText, set
             <button
                 onClick={handleAddPosting}
                 className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Analyze Posting</button>
-            <h2 className="text-xl font-bold mb-4">My Postings</h2>
+            <h2 className="text-xl font-bold mb-4 mt-4">My Postings</h2>
             <ul className="space-y-2">
             {postings.map((posting) => (
                 <li key={posting.id} className="flex justify-between items-start border-b pb-2">
