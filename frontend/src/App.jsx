@@ -33,6 +33,9 @@ function App() {
       .then((data) => {
         if (data.success) {
           setLoggedIn(true);
+          setEmail("");
+          setPassword("");
+          setMessage("");
         } else {
           setMessage(data.error);
         }
@@ -50,6 +53,9 @@ function App() {
     .then((data) => {
       if (data.success) {
           setLoggedIn(true);
+          setEmail("");
+          setPassword("");
+          setMessage("");
       } else {
         setMessage(data.error);
       }
@@ -66,6 +72,8 @@ function App() {
       setSkills([]);
       setPostings([]);
       setGaps([]);
+      setEmail("");
+      setPassword("");
     });
   };
 

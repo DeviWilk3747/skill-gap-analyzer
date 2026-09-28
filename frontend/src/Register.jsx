@@ -1,5 +1,8 @@
+import { use, useState } from "react";
 function Register({ email, setEmail, password, setPassword, handleRegister, message, setShowRegister }) {
-  return (
+    const[showPassword, setShowPassword] = useState(false);
+    
+    return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h1 className="text-2xl font-bold text-center mb-1">Skill Gap Analyzer</h1>
@@ -13,13 +16,22 @@ function Register({ email, setEmail, password, setPassword, handleRegister, mess
           className="w-full border border-gray-300 rounded px-3 py-2 mb-3"
         />
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full border border-gray-300 rounded px-3 py-2 mb-4"
-        />
+        <div className="relative mb-4">
+            <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 pr-16"
+            />
+            <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-sm text-blue-600"
+            >
+                {showPassword ? "Hide" : "Show"}
+            </button>
+        </div>
 
         <button
           onClick={handleRegister}
